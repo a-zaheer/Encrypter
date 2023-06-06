@@ -22,4 +22,10 @@ Finally, the 10th round omits the MixColumns step such that it only consists of:
 
 The final state array holds the ciphertext. Decryption follows the same process in reverse. The key is expanded using the same key schedule at the start, and then the key blocks are used starting from the end. Each step of the encryption transformation round is an invertible calculation or has a corresponding reverse lookup table. 
 ### ECB
+The AES algorithm only works on a single block of 16 bytes at a time, so multiple protocols can be used to encrypt plaintext consisting of multiple blocks. The simplest method is Electronic Code Book (ECB) mode. In ECB, the user provides a single 128-bit key, the plaintext is broken into blocks of 16 bytes, and each block is encrypted independently with AES using the single key. Two plaintext blocks that are the same will get encrypted to the same ciphertext which may leak information. For instance, if each pixel of an image corresponds to a single block, then all the same colors on an image will get encrypted the same. Patterns in the original image will persist in the ciphertext. ECB is not very secure, but it is simple to implement and fast to execute. 
 ### PKCS#7
+Since AES works in blocks of 16 bytes, filler bytes may need to be appended to the plaintext to extend its length to a multiple of 16. After the original plaintext is split up, the final block can have anywhere from 1 - 16 bytes. PKCS#7 pads this final block based on how many bytes it has.
+1. If it has 1 - 15 bytes left, it uses the number of free spots as the padding. For instance, if the block had one byte of arbitrary data, 'XX' in hex, then it would pad the remaining 16 - 1 positions with '0F' which is 15 in hex. XX -> XX0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F
+2. If it has 16 bytes, then an additional block of 16 '00's is appended to the plaintext. 
+
+Even when the plaintext is a multiple of 16, padding is added so that the final byte in the final block is guaranteed to be a padding byte. This makes it possible to recover the original plaintext after decryption. 

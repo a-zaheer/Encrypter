@@ -5,6 +5,24 @@ Encrypter can encrypt files using the Advanced Encryption Standard (AES), more s
 
 Files are completely encrypted such that every byte of plaintext gets transformed into ciphertext. The encryption is performed one block of bytes at a time using the Electronic Code Book (ECB) mode. The final block is padded using PKCS#7 padding before being encrypted. After decryption, the padding is removed so that the user only deals with the original plain text. 
 
+## Getting Started 
+Windows: You will need Visual Studio installed for the C compiler. Open the Developer Command Prompt and navigate to the local directory containing the source code files. Next, compile the files into an executable using the command "cl AES.c byte_ops.c runner.c" /link /out:<executable-name>.exe".
+
+Linux: You will need the GNU C compiler installed. Open up the terminal and navigate to the local directory containing the source code files. Next, compile the source files using the command "gcc -o <executable-name> -std=c11 -AES.c -byte_ops.c -runner.c". 
+
+## How to Run 
+In our case, we named the executable "AES". Navigate to the directory containing the executable and run the following command "AES [-mode] [-option] <input file> <output file>" in the terminal. 
+  
+Mode: Use '-e' to encrypt and '-d' to decrypt
+  
+Option: Leave it blank to simply encrypt a string through the terminal or use '-f' to encrypt a file. 
+  
+Files: If the file option is selected, then enter the relative path of the input file and the relative path of where you want the output file to go. If the input file is in the same directory and you want the output file to be there as well, then just use their names. 
+  
+Example: To encrypt a file in the current directory I will input "AES -e -f exampleFile.txt outFile.txt.enc". This takes a file called "exampleFile.txt" and outputs an encrypted file named "outFile.txt.enc". The custom file extension is simply there to help with recovering the original extension when decrypting.
+  
+The program provides instructions for the rest of the steps. 
+
 ## AES Background 
 ### AES-128
 AES is a block cipher. That means it takes a block of bytes, performs a series of reversible transformation rounds, and then outputs another block of bytes. Both the input and output blocks consist of 16 bytes or 128 bits. It also takes in a key, which is 16 bytes for AES-128, to encrypt the plaintext. Using that same key, AES can decrypt the ciphertext by reversing all the transformations. 
